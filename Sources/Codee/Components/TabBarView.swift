@@ -40,6 +40,16 @@ public struct TabBarView<T: TabItemRepresentable>: View {
     public var onTabSelected: ((T) -> Void)? = nil
     public var style: TabBarStyle
     
+    public init(
+        manager: TabBarManager<T>,
+        onTabSelected: ( (T) -> Void)? = nil,
+        style: TabBarStyle
+    ) {
+        self.manager = manager
+        self.onTabSelected = onTabSelected
+        self.style = style
+    }
+    
     public var body: some View {
         HStack(spacing: 12) {
             ForEach(manager.availableTabs, id: \.self) { tab in
