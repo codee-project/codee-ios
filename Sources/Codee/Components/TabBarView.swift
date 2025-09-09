@@ -16,7 +16,7 @@ public protocol TabItemRepresentable: Hashable {
 
 // Struktura do zarządzania stanem TabBar
 public class TabBarManager<T: TabItemRepresentable>: ObservableObject {
-    @Published var selectedTab: T
+    @Published public var selectedTab: T
     private var tabs: [T]
     
     public init(tabs: [T], initialTab: T? = nil) {
