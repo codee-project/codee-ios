@@ -1,5 +1,5 @@
 //
-//  PulsingCircle.swift
+//  LoaderView.swift
 //  Codee
 //
 //  Created by Eryk on 30/07/2025.
@@ -18,14 +18,14 @@ public extension View {
                     Color.black.opacity(0.6)
                         .ignoresSafeArea()
                     
-                    PulsingCircle()
+                    LoaderView()
                 }
             }
         }
     }
 }
 
-public struct PulsingCircle: View {
+public struct LoaderView: View {
     @State private var scale: CGFloat = 1.0
     @State private var opacity: Double = 1
     

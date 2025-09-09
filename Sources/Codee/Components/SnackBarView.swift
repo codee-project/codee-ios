@@ -1,5 +1,5 @@
 //
-//  SnackbarView.swift
+//  SnackBarView.swift
 //  Codee
 //
 //  Created by Eryk on 02/06/2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public enum Snackbar {
+public enum SnackBar {
     @MainActor
     public class ViewModel: ObservableObject {
         // MARK: Properties
@@ -49,7 +49,7 @@ public enum Snackbar {
     }
 }
 
-public extension Snackbar {
+public extension SnackBar {
     struct ContentView: View {
         // MARK: Properties
         @ObservedObject private var viewModel: ViewModel
@@ -88,7 +88,7 @@ public extension Snackbar {
 }
 
 // MARK: View elements
-private extension Snackbar.ContentView {
+private extension SnackBar.ContentView {
     @ViewBuilder var content: some View {
         HStack(alignment: .center, spacing: 8) {
             HStack(alignment: .center, spacing: 8) {
@@ -127,7 +127,7 @@ private extension Snackbar.ContentView {
     }
 }
 
-public struct SnackbarContainerView<ContentView: View>: View {
+public struct SnackBarContainerView<ContentView: View>: View {
     private let isPresented: Binding<Bool>
     private let dismissAfterSeconds: TimeInterval?
     private let contentView: () -> ContentView
@@ -174,7 +174,7 @@ public struct SnackbarContainerView<ContentView: View>: View {
     }
 }
 
-public enum SnackbarAlignment {
+public enum SnackBarAlignment {
     case top
     case bottom
     
@@ -191,12 +191,12 @@ public enum SnackbarAlignment {
 // MARK: View extension
 public extension View {
     @ViewBuilder func snackbar(
-        viewModel: Binding<Snackbar.ViewModel>,
+        viewModel: Binding<Codee.SnackBar.ViewModel>,
         bottomPadding: CGFloat = 50
     ) -> some View {
         ZStack(alignment: .bottom) {
             self
-            Snackbar.ContentView(viewModel: viewModel.wrappedValue, bottomPadding: bottomPadding)
+            Codee.SnackBar.ContentView(viewModel: viewModel.wrappedValue, bottomPadding: bottomPadding)
         }
     }
 }
