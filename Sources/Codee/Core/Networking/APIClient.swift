@@ -15,12 +15,12 @@ public class APIClient: APIClientProtocol {
     private let baseURL: URL
     private let session: URLSession
     
-    init(baseURL: URL, session: URLSession = .shared) {
+    public init(baseURL: URL, session: URLSession = .shared) {
         self.baseURL = baseURL
         self.session = session
     }
     
-    func request<T: Decodable>(_ endpoint: APIEndpoint) async throws -> T {
+    public func request<T: Decodable>(_ endpoint: APIEndpoint) async throws -> T {
         guard let request = prepareRequest(for: endpoint) else {
             throw NetworkError.invalidRequest
         }

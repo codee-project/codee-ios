@@ -8,6 +8,7 @@
 import SwiftUI
 
 public enum Snackbar {
+    @MainActor
     public class ViewModel: ObservableObject {
         // MARK: Properties
         @Published var isPresented: Bool
@@ -49,7 +50,7 @@ public enum Snackbar {
 }
 
 public extension Snackbar {
-    public struct ContentView: View {
+    struct ContentView: View {
         // MARK: Properties
         @ObservedObject private var viewModel: ViewModel
         let bottomPadding: CGFloat
@@ -132,7 +133,7 @@ public struct SnackbarContainerView<ContentView: View>: View {
     private let contentView: () -> ContentView
     private let text: String
 
-    init(
+    public init(
         isPresented: Binding<Bool>,
         text: String,
         dismissAfterSeconds: TimeInterval?,
@@ -144,7 +145,7 @@ public struct SnackbarContainerView<ContentView: View>: View {
         self.contentView = contentView
     }
 
-    var body: some View {
+    public var body: some View {
         ZStack {
             contentView()
 
