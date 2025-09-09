@@ -19,12 +19,12 @@ public class TabBarManager<T: TabItemRepresentable>: ObservableObject {
     @Published var selectedTab: T
     private var tabs: [T]
     
-    init(tabs: [T], initialTab: T? = nil) {
+    public init(tabs: [T], initialTab: T? = nil) {
         self.tabs = tabs
         self.selectedTab = initialTab ?? tabs.first!
     }
     
-    var availableTabs: [T] {
+    public var availableTabs: [T] {
         return tabs
     }
 }
