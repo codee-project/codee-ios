@@ -12,6 +12,16 @@ public struct SocialButton: View {
     let borderColor: Color
     let action: () -> Void
     
+    public init(
+        icon: ImageResource,
+        borderColor: Color,
+        action: @escaping () -> Void
+    ) {
+        self.icon = icon
+        self.borderColor = borderColor
+        self.action = action
+    }
+    
     public var body: some View {
         SwiftUI.Button(action: action) {
             ZStack {
