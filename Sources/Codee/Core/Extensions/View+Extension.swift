@@ -163,7 +163,12 @@ public extension View {
 }
 
 public extension View {
-    func backgroundBlur(lightStyle: UIBlurEffect.Style = .systemThinMaterial, darkStyle: UIBlurEffect.Style = .systemThinMaterial, colorScheme: ColorScheme = .light, cornerRadius: CGFloat = 24) -> some View {
+    func backgroundBlur(
+        lightStyle: UIBlurEffect.Style = .systemThinMaterial,
+        darkStyle: UIBlurEffect.Style = .systemThinMaterial,
+        colorScheme: ColorScheme = .light,
+        cornerRadius: CGFloat = 24
+    ) -> some View {
         return self
             .background(Color.whiteDefault.opacity(0.6))
             .background(VisualEffectView(
@@ -179,7 +184,7 @@ public struct VisualEffectBlur<Content: View>: View {
     var vibrancyStyle: UIVibrancyEffectStyle?
     let content: Content
 
-    init(blurStyle: UIBlurEffect.Style, vibrancyStyle: UIVibrancyEffectStyle? = nil, @ViewBuilder content: () -> Content) {
+    public init(blurStyle: UIBlurEffect.Style, vibrancyStyle: UIVibrancyEffectStyle? = nil, @ViewBuilder content: () -> Content) {
         self.blurStyle = blurStyle
         self.vibrancyStyle = vibrancyStyle
         self.content = content()
@@ -196,6 +201,11 @@ public struct VisualEffectBlur<Content: View>: View {
 public struct VisualEffectView: UIViewRepresentable {
     var blurStyle: UIBlurEffect.Style
     var vibrancyStyle: UIVibrancyEffectStyle?
+    
+    public init(blurStyle: UIBlurEffect.Style, vibrancyStyle: UIVibrancyEffectStyle? = nil) {
+        self.blurStyle = blurStyle
+        self.vibrancyStyle = vibrancyStyle
+    }
 
     public func makeUIView(context: UIViewRepresentableContext<Self>) -> UIVisualEffectView {
         return UIVisualEffectView(effect: UIBlurEffect(style: blurStyle))
