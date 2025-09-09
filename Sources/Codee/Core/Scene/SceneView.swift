@@ -18,6 +18,7 @@ public struct SceneView<Content: View>: View {
     let spacing: CGFloat?
     let padding: CGFloat?
     let background: ImageResource?
+    let backgroundBlur: ImageResource?
     var content: Content
     
     public init(
@@ -29,7 +30,8 @@ public struct SceneView<Content: View>: View {
         alignment: HorizontalAlignment = .leading,
         spacing: CGFloat? = 16,
         padding: CGFloat? = 16,
-        background: ImageResource?,
+        background: ImageResource? = nil,
+        backgroundBlur: ImageResource? = nil,
         onAppear: (() -> Void)? = nil,
         @ViewBuilder content: @escaping () -> Content
     ) {
@@ -42,6 +44,7 @@ public struct SceneView<Content: View>: View {
         self.spacing = spacing
         self.padding = padding
         self.background = background
+        self.backgroundBlur = backgroundBlur
         self.onAppear = onAppear
         self.content = content()
     }
@@ -86,10 +89,10 @@ public struct SceneView<Content: View>: View {
     
     @ViewBuilder var backgroundBlurImage: some View {
         VStack {
-            image
+            imageBlur
         }
         .background(
-            image
+            imageBlur
         )
         .fill()
     }
@@ -97,6 +100,15 @@ public struct SceneView<Content: View>: View {
     @ViewBuilder var image: some View {
         if let background {
             Image(background)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .fill()
+        }
+    }
+    
+    @ViewBuilder var imageBlur: some View {
+        if let backgroundBlur {
+            Image(backgroundBlur)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .fill()
