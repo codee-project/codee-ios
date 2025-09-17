@@ -56,6 +56,8 @@ public struct ResultView: View {
                 .font(isSmall ? .title3 : .title)
                 .multilineTextAlignment(.center)
                 .bold()
+                .lineLimit(3)
+                .multilineTextAlignment(.center)
             
             if let description {
                 Text(description)
