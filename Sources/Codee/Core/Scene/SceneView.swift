@@ -102,6 +102,7 @@ public struct SceneView<Content: View>: View {
             Image(background)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
                 .fill()
         }
     }
@@ -111,6 +112,7 @@ public struct SceneView<Content: View>: View {
             Image(backgroundBlur)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
+                .ignoresSafeArea()
                 .fill()
         }
     }
