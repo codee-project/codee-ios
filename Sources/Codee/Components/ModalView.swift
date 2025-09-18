@@ -190,6 +190,7 @@ public enum ModalAlignment {
 public extension View {
     @ViewBuilder func modal<Content: View>(
         showModal: Binding<Bool>,
+        hideModal: @escaping () -> Void = {},
         content: () -> Content
     ) -> some View {
         ZStack(alignment: .center) {
@@ -204,6 +205,7 @@ public extension View {
                     .ignoresSafeArea()
                     .onTapGesture {
                         showModal.wrappedValue = false
+                        hideModal()
                     }
                 
                 VStack(spacing: 24) {
