@@ -24,16 +24,25 @@ public struct Input: View {
     private var placeholder: String
     private var style: InputStyle = .black
     private var type: InputType = .normalLeft
-    private var validatorType: ValidatorType = .name
+    private var validatorType: ValidatorType? = .name
     @State private var errorMessage: String? = nil
     private var keyboardType: UIKeyboardType
+    
+    private var leadingPadding: CGFloat
+    private var trailingPadding: CGFloat
+    private var lineLimit: Int
+    private var isBlocked: Bool
     
     public init(
         placeholder: String,
         style: InputStyle = .black,
         type: InputType = .normalLeft,
-        validatorType: ValidatorType = .name,
+        validatorType: ValidatorType? = .name,
         keyboardType: UIKeyboardType = .default,
+        leadingPadding: CGFloat = 16,
+        trailingPadding: CGFloat = 16,
+        lineLimit: Int = 1,
+        isBlocked: Bool = false,
         text: Binding<String>
     ) {
         self.placeholder = placeholder
@@ -41,6 +50,12 @@ public struct Input: View {
         self.type = type
         self.validatorType = validatorType
         self.keyboardType = keyboardType
+        
+        self.leadingPadding = leadingPadding
+        self.trailingPadding = trailingPadding
+        self.lineLimit = lineLimit
+        self.isBlocked = isBlocked
+        
         _text = text
     }
     
@@ -62,11 +77,16 @@ public struct Input: View {
                         .blackDefault
                 )
                 .frame(minHeight: 58)
-                .padding(.horizontal, 16)
-                .multilineTextAlignment(.center)
+                .padding(.leading, leadingPadding)
+                .padding(.trailing, trailingPadding)
+                .multilineTextAlignment(.leading)
+                .lineLimit(lineLimit)
                 .frame(idealWidth: .infinity, maxWidth: .infinity)
+                .disabled(isBlocked)
                 .onReceive(Just(text)) { newValue in
-                    errorMessage = Validator.isValid(for: validatorType, newValue)
+                    if let validatorType {
+                        errorMessage = Validator.isValid(for: validatorType, newValue)
+                    }
                 }
             }
             .background(

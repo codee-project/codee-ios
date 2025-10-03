@@ -137,7 +137,12 @@ public struct SceneView<Content: View>: View {
         VStack(alignment: alignment, spacing: spacing) {
             content
         }
-        .navigationBarTitle(title, displayMode: .large)
+        .if(title != .empty) { view in
+            view.navigationBarTitle(title, displayMode: .large)
+        }
+        .if(title == .empty) { view in
+            view.navigationBarHidden(true)
+        }
         .onAppear {
             onAppear?()
         }
