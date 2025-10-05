@@ -7,7 +7,7 @@ let package = Package(
     name: "Codee",
     platforms: [
         .iOS(.v17),
-        .macOS(.v10_15)
+        .macOS(.v11)
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
