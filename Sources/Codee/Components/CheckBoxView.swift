@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CheckBox<Content: View>: View {
+public struct CheckBox<Content: View>: View {
     let action: () -> Void
     let content: Content
     let spacing: CGFloat
@@ -18,7 +18,7 @@ struct CheckBox<Content: View>: View {
     @Binding var isOn: Bool
     @Binding var errorMessage: String?
 
-    init(
+    public init(
         isOn: Binding<Bool>,
         errorMessage: Binding<String?> = .constant(nil),
         spacing: CGFloat = 16,
@@ -38,7 +38,7 @@ struct CheckBox<Content: View>: View {
         _errorMessage = errorMessage
     }
     
-    var body: some View {
+    public var body: some View {
         SwiftUI.Button {
             isOn.toggle()
             

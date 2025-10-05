@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension View {
+public extension View {
     @ViewBuilder func backAction(_ action: @escaping () -> Void) -> some View {
         self
             .navigationBarBackButtonHidden()

@@ -7,14 +7,12 @@
 
 import SwiftUI
 
-// Protokół do definiowania własnych typów zakładek
 public protocol TabItemRepresentable: Hashable {
     var id: String { get }
     var icon: String { get }
     var title: String { get }
 }
 
-// Struktura do zarządzania stanem TabBar
 public class TabBarManager<T: TabItemRepresentable>: ObservableObject {
     @Published public var selectedTab: T
     private var tabs: [T]
@@ -34,7 +32,6 @@ public enum TabBarStyle {
     case secondary
 }
 
-// Konfigurowalna struktura widoku TabBar
 public struct TabBarView<T: TabItemRepresentable>: View {
     @ObservedObject public var manager: TabBarManager<T>
     public var onTabSelected: ((T) -> Void)? = nil

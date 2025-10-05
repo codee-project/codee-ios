@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct SeparatorView: View {
-    var body: some View {
+public struct SeparatorView: View {
+    public var body: some View {
         VStack {}
             .fill(.horizontal)
             .frame(height: 6)
