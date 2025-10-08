@@ -21,6 +21,7 @@ public struct InputModel {
     var alignment: TextAlignment
     var backgroundColor: Color
     var textColor: Color
+    var cornerRadius: CGFloat
     
     public init(
         placeholder: String,
@@ -34,6 +35,7 @@ public struct InputModel {
         isBlocked: Bool = false,
         backgroundColor: Color = Color.gray.opacity(0.15),
         textColor: Color = .white,
+        cornerRadius: CGFloat = 30
     ) {
         self.placeholder = placeholder
         self.validatorType = validatorType
@@ -47,6 +49,7 @@ public struct InputModel {
         self.alignment = alignment
         self.backgroundColor = backgroundColor
         self.textColor = textColor
+        self.cornerRadius = cornerRadius
     }
 }
 
@@ -88,7 +91,7 @@ public struct Input: View {
                 }
             }
             .background(model.backgroundColor)
-            .cornerRadius(30)
+            .cornerRadius(model.cornerRadius)
             
             if let errorMessage {
                 Text(errorMessage)
