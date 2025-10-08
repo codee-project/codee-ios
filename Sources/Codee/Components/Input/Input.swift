@@ -8,29 +8,22 @@
 import SwiftUI
 import Combine
 
-public enum InputStyle {
-    case black
-    case gray
-}
-
-public struct Input: View {
-    @Binding var text: String
+public struct InputModel {
+    var placeholder: String
+    var validatorType: ValidatorType? = .name
+    var keyboardType: UIKeyboardType
     
-    private var placeholder: String
-    private var style: InputStyle = .black
-    private var validatorType: ValidatorType? = .name
-    @State private var errorMessage: String? = nil
-    private var keyboardType: UIKeyboardType
-    
-    private var leadingPadding: CGFloat
-    private var trailingPadding: CGFloat
-    private var verticalPadding: CGFloat
-    private var lineLimit: Int
-    private var isBlocked: Bool
+    var leadingPadding: CGFloat
+    var trailingPadding: CGFloat
+    var verticalPadding: CGFloat
+    var lineLimit: Int
+    var isBlocked: Bool
+    var alignment: TextAlignment
+    var backgroundColor: Color
+    var textColor: Color
     
     public init(
         placeholder: String,
-        style: InputStyle = .black,
         validatorType: ValidatorType? = .name,
         keyboardType: UIKeyboardType = .default,
         alignment: TextAlignment = .leading,
@@ -39,10 +32,10 @@ public struct Input: View {
         verticalPadding: CGFloat = 16,
         lineLimit: Int = 1,
         isBlocked: Bool = false,
-        text: Binding<String>
+        backgroundColor: Color = Color.gray.opacity(0.15),
+        textColor: Color = .white,
     ) {
         self.placeholder = placeholder
-        self.style = style
         self.validatorType = validatorType
         self.keyboardType = keyboardType
         
@@ -51,7 +44,23 @@ public struct Input: View {
         self.verticalPadding = verticalPadding
         self.lineLimit = lineLimit
         self.isBlocked = isBlocked
-        
+        self.alignment = alignment
+        self.backgroundColor = backgroundColor
+        self.textColor = textColor
+    }
+}
+
+public struct Input: View {
+    @Binding private var text: String
+    @State private var errorMessage: String? = nil
+    
+    private var model: InputModel
+    
+    public init(
+        model: InputModel,
+        text: Binding<String>
+    ) {
+        self.model = model
         _text = text
     }
     
@@ -59,38 +68,26 @@ public struct Input: View {
         VStack(spacing: 6) {
             VStack(spacing: 4) {
                 TextField(text: $text) {
-                    Text(placeholder).foregroundColor(
-                        style == .black ?
-                            .white.opacity(0.4) :
-                            .blackDefault.opacity(0.4)
-                    )
-                    .padding(.vertical, verticalPadding)
+                    Text(model.placeholder)
+                        .foregroundColor(model.textColor.opacity(0.4))
+                        .padding(.vertical, model.verticalPadding)
                 }
-                .keyboardType(keyboardType)
-                .foregroundColor(
-                    style == .black ?
-                        .white :
-                        .blackDefault
-                )
+                .keyboardType(model.keyboardType)
+                .foregroundColor(model.textColor)
                 .frame(minHeight: 58)
-                .padding(.leading, leadingPadding)
-                .padding(.trailing, trailingPadding)
-                .multilineTextAlignment(alignment)
-                .lineLimit(lineLimit)
+                .padding(.leading, model.leadingPadding)
+                .padding(.trailing, model.trailingPadding)
+                .multilineTextAlignment(model.alignment)
+                .lineLimit(model.lineLimit)
                 .frame(idealWidth: .infinity, maxWidth: .infinity)
-                .disabled(isBlocked)
+                .disabled(model.isBlocked)
                 .onReceive(Just(text)) { newValue in
-                    if let validatorType {
+                    if let validatorType = model.validatorType {
                         errorMessage = Validator.isValid(for: validatorType, newValue)
                     }
                 }
             }
-            .background(
-                style == .black ?
-                Color.gray.opacity(0.15) :
-                    Color.gray.opacity(0.15)
-                
-            )
+            .background(model.backgroundColor)
             .cornerRadius(30)
             
             if let errorMessage {
