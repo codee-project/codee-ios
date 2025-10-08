@@ -13,46 +13,42 @@ public enum InputStyle {
     case gray
 }
 
-public enum InputType {
-    case normalLeft
-    case bigCenter
-}
-
 public struct Input: View {
     @Binding var text: String
     
     private var placeholder: String
     private var style: InputStyle = .black
-    private var type: InputType = .normalLeft
     private var validatorType: ValidatorType? = .name
     @State private var errorMessage: String? = nil
     private var keyboardType: UIKeyboardType
     
     private var leadingPadding: CGFloat
     private var trailingPadding: CGFloat
+    private var verticalPadding: CGFloat
     private var lineLimit: Int
     private var isBlocked: Bool
     
     public init(
         placeholder: String,
         style: InputStyle = .black,
-        type: InputType = .normalLeft,
         validatorType: ValidatorType? = .name,
         keyboardType: UIKeyboardType = .default,
+        alignment: TextAlignment = .leading,
         leadingPadding: CGFloat = 16,
         trailingPadding: CGFloat = 16,
+        verticalPadding: CGFloat = 16,
         lineLimit: Int = 1,
         isBlocked: Bool = false,
         text: Binding<String>
     ) {
         self.placeholder = placeholder
         self.style = style
-        self.type = type
         self.validatorType = validatorType
         self.keyboardType = keyboardType
         
         self.leadingPadding = leadingPadding
         self.trailingPadding = trailingPadding
+        self.verticalPadding = verticalPadding
         self.lineLimit = lineLimit
         self.isBlocked = isBlocked
         
@@ -68,7 +64,7 @@ public struct Input: View {
                             .white.opacity(0.4) :
                             .blackDefault.opacity(0.4)
                     )
-                    .padding(.vertical, padding)
+                    .padding(.vertical, verticalPadding)
                 }
                 .keyboardType(keyboardType)
                 .foregroundColor(
@@ -79,7 +75,7 @@ public struct Input: View {
                 .frame(minHeight: 58)
                 .padding(.leading, leadingPadding)
                 .padding(.trailing, trailingPadding)
-                .multilineTextAlignment(.leading)
+                .multilineTextAlignment(alignment)
                 .lineLimit(lineLimit)
                 .frame(idealWidth: .infinity, maxWidth: .infinity)
                 .disabled(isBlocked)
@@ -103,24 +99,6 @@ public struct Input: View {
                     .foregroundColor(.red)
                     .multilineTextAlignment(.center)
             }
-        }
-    }
-    
-    var padding: CGFloat {
-        switch type {
-        case .normalLeft:
-            return 12
-        case .bigCenter:
-            return 16
-        }
-    }
-    
-    var alignment: TextAlignment {
-        switch type {
-        case .normalLeft:
-            return .leading
-        case .bigCenter:
-            return .center
         }
     }
 }
