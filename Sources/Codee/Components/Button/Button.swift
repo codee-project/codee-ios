@@ -95,7 +95,7 @@ public struct Button: View {
             verticalPadding: 16
         ),
         isDisabled: Bool = false,
-        textColor: Color = .primary,
+        textColor: Color = .whiteDefault,
         backgroundColor: Color = .blackDefault,
         cornerRadius: CGFloat = 30,
         action: (() -> Void)? = nil
