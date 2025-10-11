@@ -8,8 +8,7 @@
 import SwiftUI
 
 public enum SnackBar {
-    @MainActor
-    public class ViewModel: ObservableObject {
+    @MainActor public class ViewModel: ObservableObject {
         // MARK: Properties
         @Published var isPresented: Bool
         @Published var visibilityTime: TimeInterval?

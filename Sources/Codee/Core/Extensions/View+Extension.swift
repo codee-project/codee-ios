@@ -18,15 +18,15 @@ public extension View {
 }
 
 public extension View {
-    func border(color: Color) -> some View {
+    func border(color: Color, width: CGFloat = 6, radius: CGFloat = 30) -> some View {
         return VStack {
             self
-                .background(Color.whiteDefault.opacity(0.6))
-                .cornerRadius(30)
-                .padding(6)
+                .background(Color.whiteDefault)
+                .cornerRadius(radius)
+                .padding(width)
         }
-        .background(color.opacity(0.5))
-        .cornerRadius(34)
+        .background(color)
+        .cornerRadius(radius + 4)
     }
 }
 

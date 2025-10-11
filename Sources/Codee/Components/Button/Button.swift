@@ -7,173 +7,241 @@
 
 import SwiftUI
 
-public enum ButtonStyle {
-    case primary
-    case secondary
-    case tertiary
-    case purple
-    case blue
-    case red
-    case green
-    case gray
-    case custom(Color, Color)
+public enum ButtonType: Equatable {
+    case `default`
+    
+    case borderd(
+        width: CGFloat,
+        color: Color,
+        radius: CGFloat
+    )
 }
 
-public struct Button: View {
+public enum ButtonIcon {
+    case without
+    
+    case icon(
+        alignment: HorizontalAlignment,
+        icon: Icon,
+        iconColor: Color
+    )
+}
+
+public enum ButtonSize {
+    case fill(
+        horizontalPadding: CGFloat,
+        verticalPadding: CGFloat
+    )
+    
+    case small(
+        horizontalPadding: CGFloat,
+        verticalPadding: CGFloat
+    )
+}
+
+public struct ButtonModel {
     let title: String
-    let icon: Icon?
-    let iconColor: Color?
-    let style: ButtonStyle
-    let isFill: Bool
-    let isSmall: Bool
+    
+    let type: ButtonType
+    let size: ButtonSize
+    let icon: ButtonIcon
     let isDisabled: Bool
-    let isOn: Binding<Bool>?
+    
+    let textColor: Color
+    let backgroundColor: Color
+    let cornerRadius: CGFloat
+    
     let action: (() -> Void)?
     
     public init(
-        style: ButtonStyle = .primary,
         title: String,
-        icon: Icon? = nil,
-        iconColor: Color? = nil,
-        isFill: Bool = true,
-        isSmall: Bool = false,
+        type: ButtonType = .default,
+        icon: ButtonIcon = .without,
+        size: ButtonSize = .fill(
+            horizontalPadding: 16,
+            verticalPadding: 16
+        ),
         isDisabled: Bool = false,
-        isOn: Binding<Bool>? = nil,
+        textColor: Color = .whiteDefault,
+        backgroundColor: Color = .blackDefault,
+        cornerRadius: CGFloat = 30,
         action: (() -> Void)? = nil
     ) {
-        self.style = style
         self.title = title
+        self.type = type
         self.icon = icon
-        self.iconColor = iconColor
-        self.isFill = isFill
-        self.isSmall = isSmall
+        self.size = size
         self.isDisabled = isDisabled
-        self.isOn = isOn
+        self.textColor = textColor
+        self.backgroundColor = backgroundColor
+        self.cornerRadius = cornerRadius
         self.action = action
+    }
+}
+
+public struct Button: View {
+    let model: ButtonModel
+    
+    public init(model: ButtonModel) {
+        self.model = model
+    }
+    
+    public init(
+        title: String,
+        type: ButtonType = .default,
+        icon: ButtonIcon = .without,
+        size: ButtonSize = .fill(
+            horizontalPadding: 16,
+            verticalPadding: 16
+        ),
+        isDisabled: Bool = false,
+        textColor: Color = .primary,
+        backgroundColor: Color = .blackDefault,
+        cornerRadius: CGFloat = 30,
+        action: (() -> Void)? = nil
+    ) {
+        self.model = .init(
+            title: title,
+            type: type,
+            icon: icon,
+            size: size,
+            isDisabled: isDisabled,
+            textColor: textColor,
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius,
+            action: action
+        )
     }
     
     public var body: some View {
-        if let action {
+        if let action = model.action {
             SwiftUI.Button(action: {
                 action()
             }) {
-                text
+                iconAndText
             }
-            .disabled(isDisabled)
+            .disabled(model.isDisabled)
         } else {
-            text
+            iconAndText
         }
     }
     
-    var text: some View {
+    @ViewBuilder var iconAndText: some View {
         HStack {
-            if let icon {
-                Image(systemName: icon.rawValue)
-                    .foregroundColor(
-                        isDisabled ? foregroundColor :
-                            (iconColor ?? foregroundColor)
-                    )
-                    .opacity(isDisabled ? 0.6 : 1)
-            }
-            
-            if !title.isEmpty {
-                Text(title)
-                    .font(.headline)
-                    .foregroundColor(foregroundColor)
-                    .if(isOn.isNotNil) { view in
-                        view.fill(.horizontal, .leading)
-                    }
-            }
-            
-            if isOn.isNotNil {
-                HStack {
-                    HStack {
-                        
-                    }
-                    .frame(width: 32, height: 32)
-                    .background(isOn.isTrue ? Color.blackDefault : .gray)
-                    .cornerRadius(32)
-                    .padding(4)
+            switch model.icon {
+            case .without:
+                text
+            case .icon(let alignment, let icon, let iconColor):
+                switch alignment {
+                case .leading:
+                    iconView(icon, iconColor)
+                    text
+                case .trailing:
+                    text
+                    iconView(icon, iconColor)
+                default:
+                    iconView(icon, iconColor)
+                    text
                 }
-                .frame(width: 60, height: 40, alignment: isOn.isTrue ? .trailing : .leading)
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(32)
             }
         }
-        .padding(.vertical, isSmall ? (isSecondary ? 8 : 10) : (isSecondary ? 14 : 18))
-        .padding(.horizontal, isSmall ? 12 : 30)
+        .padding(.vertical, verticalPadding)
+        .padding(.horizontal, horizontalPadding)
         .if(isFill) { view in
-            view.fill(.horizontal, isOn.isTrue ? .leading : .center)
+            view.fill(.horizontal, .center)
         }
-        .background(backgroundColor)
-        .cornerRadius(isSmall ? 16 : 30)
-        .if(isSecondary) { view in
-            view
-                .backgroundBlur()
-                .border(color: iconColor?.opacity(0.3) ?? .gray.opacity(0.2))
+        .background(model.backgroundColor)
+        .cornerRadius(model.cornerRadius)
+        .if(model.type != ButtonType.default) { view in
+            VStack {
+                switch model.type {
+                case .borderd(let width, let color, let radius):
+                    view.border(color: color, width: width, radius: radius)
+                default:
+                    view
+                }
+            }
         }
     }
     
-    var isSecondary: Bool {
-        switch style {
-        case .secondary:
+    @ViewBuilder func iconView(_ icon: Icon, _ iconColor: Color) -> some View {
+        Image(systemName: icon.rawValue)
+            .foregroundColor(iconColor)
+            .opacity(model.isDisabled ? 0.6 : 1)
+    }
+    
+    @ViewBuilder var text: some View {
+        if !model.title.isEmpty {
+            Text(model.title)
+                .font(.headline)
+                .foregroundColor(model.textColor)
+        }
+    }
+    
+    var verticalPadding: CGFloat {
+        switch model.size {
+        case .fill(_, let verticalPadding):
+            return verticalPadding
+        case .small(_, let verticalPadding):
+            return verticalPadding
+        }
+    }
+    
+    var horizontalPadding: CGFloat {
+        switch model.size {
+        case .fill(let horizontalPadding, _):
+            return horizontalPadding
+        case .small(let horizontalPadding, _):
+            return horizontalPadding
+        }
+    }
+    
+    var isFill: Bool {
+        switch model.size {
+        case .fill(_, _):
             return true
-        default:
+        case .small(_, _):
             return false
         }
     }
-    
-    var foregroundColor: Color {
-        if !isDisabled {
-            switch style {
-            case .primary:
-                return .whiteDefault
-            case .secondary:
-                return .blackDefault
-            case .tertiary:
-                return .black
-            case .purple:
-                return .purple
-            case .blue:
-                return .blue
-            case .red:
-                return .red
-            case .green:
-                return .green
-            case .gray:
-                return .white
-            case .custom(let textColor, _):
-                return textColor
-            }
-        } else {
-            return .gray.opacity(0.6)
-        }
+}
+
+#Preview {
+    VStack {
+        Button(
+            model: .init(title: "Default")
+        )
+        
+        Button(
+            model: .init(
+                title: "Button",
+                type: .borderd(width: 2, color: .red, radius: 2),
+                textColor: .red,
+                backgroundColor: .white,
+                cornerRadius: 2
+            )
+        )
+        
+        Button(
+            model: .init(
+                title: "Green",
+                type: .borderd(width: 6, color: .green, radius: 12),
+                size: .small(horizontalPadding: 16, verticalPadding: 8),
+                textColor: .green,
+                backgroundColor: .green.opacity(0.1),
+                cornerRadius: 12
+            )
+        )
+        
+        Button(
+            model: .init(
+                title: "Gray",
+                size: .small(horizontalPadding: 24, verticalPadding: 12),
+                textColor: .black,
+                backgroundColor: .gray.opacity(0.2),
+                cornerRadius: 24
+            )
+        )
     }
-    
-    var backgroundColor: Color {
-        if !isDisabled {
-            switch style {
-            case .primary:
-                return .blackDefault
-            case .secondary:
-                return .clear
-            case .tertiary:
-                return .white
-            case .purple:
-                return .purple.opacity(0.2)
-            case .blue:
-                return .blue.opacity(0.2)
-            case .red:
-                return .red.opacity(0.2)
-            case .green:
-                return .green.opacity(0.2)
-            case .gray:
-                return .gray.opacity(0.05)
-            case .custom(_, let backgroundColor):
-                return backgroundColor
-            }
-        } else {
-            return .gray.opacity(0.4)
-        }
-    }
+    .padding()
 }
