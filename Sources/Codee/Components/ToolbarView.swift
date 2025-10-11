@@ -16,12 +16,15 @@ public extension View {
                     SwiftUI.Button {
                         action()
                     } label: {
-                        Image(.close)
-                            .resizable()
-                            .renderingMode(.template)
-                            .scaledToFill()
-                            .foregroundColor(.blackDefault)
-                            .frame(width: 18, height: 18)
+                        VStack {
+                            Image(.closeDefault)
+                                .resizable()
+                                .renderingMode(.template)
+                                .scaledToFill()
+                                .foregroundColor(.blackDefault)
+                                .frame(width: 22, height: 22)
+                        }
+                        .background(.white.opacity(0.01))
                     }
                 }
             }
