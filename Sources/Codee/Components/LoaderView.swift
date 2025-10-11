@@ -8,20 +8,23 @@
 import SwiftUI
 
 public extension View {
-    func loader(_ isLoading: Binding<Bool>) -> some View {
+    @ViewBuilder func loader(_ isLoading: Binding<Bool>) -> some View {
         ZStack {
             self
                 .disabled(isLoading.wrappedValue)
-            
+                .allowsHitTesting(!isLoading.wrappedValue)
+
             if isLoading.wrappedValue {
-                ZStack {
-                    Color.black.opacity(0.6)
-                        .ignoresSafeArea()
-                    
-                    LoaderView()
-                }
+                Color.black.opacity(0.6)
+                    .ignoresSafeArea()
+                    .transition(.opacity)
+
+                LoaderView()
+                    .transition(.scale.combined(with: .opacity))
+                    .zIndex(1)
             }
         }
+        .animation(.easeInOut(duration: 0.25), value: isLoading.wrappedValue)
     }
 }
 
