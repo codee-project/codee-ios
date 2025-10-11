@@ -22,9 +22,9 @@ public extension View {
                                 .renderingMode(.template)
                                 .scaledToFill()
                                 .foregroundColor(.blackDefault)
-                                .frame(width: 22, height: 22)
+                                .frame(width: 24, height: 24)
                         }
-                        .background(.white.opacity(0.01))
+                        .background(.white.opacity(0.001))
                     }
                 }
             }
