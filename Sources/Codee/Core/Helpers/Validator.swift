@@ -25,6 +25,10 @@ public struct Validator {
             return nil
         }
         
+        if name.allSatisfy({ $0 == " " }) {
+            return "Wprowadzono tylko spacje"
+        }
+        
         //        if name.count < 5 {
         //            return "Zbyt krótka nazwa"
         //        }
@@ -98,7 +102,7 @@ public struct Validator {
         
         let regex = "^[A-Za-z\\d!@#$%^&*]{8,26}$"
         let predicate = NSPredicate(format: "SELF MATCHES %@", regex)
-        return predicate.evaluate(with: name) ? "Hasło musi posiadać cyfre, znak specjalny, dużą i małą litere" : nil
+        return predicate.evaluate(with: name) ? "Hasło musi posiadać cyfrę, znak specjalny, dużą i małą literę" : nil
     }
     
     static func isValidPrice(_ name: String) -> String? {
