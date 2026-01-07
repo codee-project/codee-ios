@@ -133,7 +133,7 @@ public struct Validator {
         return !predicate.evaluate(with: name) ? "Możesz wprowadzić tylko cyfry" : nil
     }
     
-    static func isValid(for validatorType: ValidatorType, _ text: String) -> String? {
+    public static func isValid(for validatorType: ValidatorType, _ text: String) -> String? {
         switch validatorType {
         case .name:
             return Validator.isValidName(text)
