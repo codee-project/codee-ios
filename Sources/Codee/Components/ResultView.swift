@@ -38,7 +38,7 @@ public struct ResultView: View {
         title: String,
         description: String?
     ) {
-        self.icon = isSuccess ? .checkmark : .xmark
+        self.icon = isSuccess ? .success : .failure
         self.color = isSuccess ? .green : .red
         self.isSmall = isSmall
         self.title = title
@@ -48,9 +48,20 @@ public struct ResultView: View {
     
     public var body: some View {
         VStack(spacing: 12) {
-            Image(systemName: icon.rawValue)
-                .font(.system(size: isSmall ? 80 : 120))
-                .foregroundStyle(color, color.opacity(0.12))
+            if #available(iOS 18.0, *) {
+                Image(systemName: icon.rawValue)
+                    .font(.system(size: isSmall ? 80 : 120))
+                    .font(.system(size: 44))
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(Color.blackDefault, color)
+                    .symbolEffect(.bounce.up.byLayer, options: .repeat(.periodic(delay: 3.0)))
+            } else {
+                Image(systemName: icon.rawValue)
+                    .font(.system(size: isSmall ? 80 : 120))
+                    .font(.system(size: 44))
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(Color.blackDefault, color)
+            }
             
             Text(title)
                 .font(isSmall ? .title3 : .title)

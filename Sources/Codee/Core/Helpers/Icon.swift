@@ -33,4 +33,6 @@ public enum Icon: String {
     case chevronRight = "chevron.right"
     
     case logout = "delete.backward.fill"
+    case success = "checkmark.circle.dotted"
+    case failure = "lock.circle.dotted"
 }
