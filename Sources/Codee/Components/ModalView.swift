@@ -97,7 +97,7 @@ public extension View {
                         }
                     }
                 
-                VStack(spacing: 12) {
+                VStack(spacing: 6) {
                     topContent()
                     ModalContentView(content: content)
                 }
