@@ -71,10 +71,11 @@ public struct SizePreferenceKey: @MainActor PreferenceKey {
 
 // MARK: - Modal View Extension
 public extension View {
-    @ViewBuilder func modal<Content: View>(
+    @ViewBuilder func modal<TopContent: View, Content: View>(
         showModal: Binding<Bool>,
         hideModal: @escaping () -> Void = {},
         withTapOnBackground: Bool = true,
+        @ViewBuilder topContent: @escaping () -> TopContent = { EmptyView()} ,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View {
         ZStack {
@@ -96,7 +97,10 @@ public extension View {
                         }
                     }
                 
-                ModalContentView(content: content)
+                VStack(spacing: 12) {
+                    topContent()
+                    ModalContentView(content: content)
+                }
             }
         }
     }
